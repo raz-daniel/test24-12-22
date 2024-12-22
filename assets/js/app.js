@@ -19,19 +19,32 @@ const generateCountriesHTML = countries => {
 
 const generateCountriesStatsHTML = countries => {
     const numberOfCountries = countries.length
-    console.log(numberOfCountries)
+    const numberOfCitizensInCountries = countries.reduce((sum, country) => {
+        const {population} = country
+        return sum+population
+    },0)
+    const averageCitizens = (numberOfCitizensInCountries / numberOfCountries).toFixed(2)
+    return `
+    <li>Num of Countries: ${numberOfCountries}</li>
+    <li>num of world citizens ${numberOfCitizensInCountries}</li>
+    <li>average of citizens is: ${averageCitizens}</li>
+    `
 }
 
 const renderCountriesHTML = newCountriesHTML => document.getElementById('countriesTBody').innerHTML = newCountriesHTML
 
-const renderCountriesStatsHTML = newCountriesStats => {
-    //
-}
+const renderCountriesStatsHTML = newCountriesStats => document.getElementById('basicUlStats').innerHTML = newCountriesStats
 
+
+{/* <tr>
+                <td>${region}</td>
+                <td>${name.common}</td>
+            </tr> */}
 
 
 document.getElementById('countriesForm').addEventListener('submit', async (event) => {
     event.preventDefault();
+    
     const countriesData = await collectData('https://restcountries.com/v3.1/all');
     const countriesHTML = generateCountriesHTML(countriesData)
     const countriesStats = generateCountriesStatsHTML(countriesData)
