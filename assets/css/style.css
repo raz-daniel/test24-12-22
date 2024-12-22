@@ -1,0 +1,9 @@
+#countriesForm  {
+    text-align: center;
+    border: 1px solid black;
+}
+
+#countriesForm  * {
+    
+    border: 1px solid black;
+}
