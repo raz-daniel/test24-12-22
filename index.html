@@ -12,19 +12,20 @@
 </head>
 
 <body>
-    <form id="countriesForm">
-        <div class="mb-3">
-            <h3>Countries Information And Stats</h3>
+    <form id="countriesForm" class="container mt-5 border rounded p-4">
+        <div class="mb-4">
+            <h3 class="text-primary text-center">Countries Information And Stats</h3>
         </div>
-        <div>
-            <label>Enter Country Name</label>
-            <input id="countryInput" type="text" placeholder="Enter Country Name">
-            <button id="searchButton" type="button">Show Data</button>
+        <div class="input-group mb-3">
+            <input id="countryInput" type="text" placeholder="Enter Country Name" class="form-control">
+
+            <button id="searchButton" type="button" class="btn btn-primary">Show Data</button>
         </div>
-        <div>
-            <button type="submit">Display All</button>
+        <div class="text-center mb-3">
+            <button type="submit" class="btn btn-success">Display All</button>
         </div>
     </form>
+
     <hr>
     <h5>Basic Stats</h5>
     <ul id="basicUlStats">
