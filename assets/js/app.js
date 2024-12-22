@@ -63,19 +63,46 @@
 
     document.getElementById('countriesForm').addEventListener('submit', async (event) => {
         event.preventDefault();
+        try {
+            const countriesData = await collectData('https://restcountries.com/v3.1/all');
+            const countriesHTML = generateCountriesHTML(countriesData)
+            const countriesStats = generateCountriesStatsHTML(countriesData)
+            const regionsHTML = generateRegionsHTML(countriesData)
+            renderCountriesHTML(countriesHTML)
+            renderCountriesStatsHTML(countriesStats)
+            renderRegionsHTML(regionsHTML)
+        } catch (error) {
+            console.warn(error)
+        }
 
-        const countriesData = await collectData('https://restcountries.com/v3.1/all');
-        const countriesHTML = generateCountriesHTML(countriesData)
-        const countriesStats = generateCountriesStatsHTML(countriesData)
-        const regionsHTML = generateRegionsHTML(countriesData)
-        renderCountriesHTML(countriesHTML)
-        renderCountriesStatsHTML(countriesStats)
-        renderRegionsHTML(regionsHTML)
 
     })
 
-    document.getElementById('showNameData').addEventListener('click', (event) => {
+    const generateCountriesStatsFromInput = (countries, input) => {
+        const filteredCountries = countries.filter(country => {
+            const {name: {common}} = country
+            return common.toLowerCase().includes(input.toLowerCase())
+        })
+    
+        return filteredCountries
+    }
+
+    document.getElementById('searchButton').addEventListener('click', async (event) => {
         event.preventDefault()
+        try {
+            const input = document.getElementById('countryInput').value;
+            console.log(input)
+            const countriesData = await collectData('https://restcountries.com/v3.1/all');
+            const inputCountriesStats = generateCountriesStatsFromInput (countriesData, input)
+            const countriesHTML = generateCountriesHTML(inputCountriesStats)
+            const countriesStats = generateCountriesStatsHTML(inputCountriesStats)
+            const regionsHTML = generateRegionsHTML(inputCountriesStats)
+            renderCountriesHTML(countriesHTML)
+            renderCountriesStatsHTML(countriesStats)
+            renderRegionsHTML(regionsHTML)
+        } catch (error) {
+            console.warn(error)
+        }
     })
 
 
