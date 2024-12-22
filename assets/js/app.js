@@ -52,13 +52,40 @@
         return uniqueRegions;
     }
 
+    const generateCurrenciesHTML = countries => {
+        const uniqueCurrenciesHTML = [...new Set(countries.map(country => {
+            
+            if (country.currencies) {
+                return Object.keys(country.currencies)[0]
+            }
+            return 'N/A'
+        }))]
+        .map(currency => ({
+            currency,
+            count: countries.filter(country => 
+                country.currencies && Object.keys(country.currencies)[0] === currency
+            ).length
+        }))
+        .map(money => {
+            const {currency, count} = money
+            return `
+            <tr>
+                <td>${currency}</td>
+                <td>${count}</td>
+            </tr>
+            `
+        }).join('');
+        
+        return uniqueCurrenciesHTML;
+    }
+
     const renderCountriesHTML = newCountriesHTML => document.getElementById('countriesTBody').innerHTML = newCountriesHTML
 
     const renderCountriesStatsHTML = newCountriesStats => document.getElementById('basicUlStats').innerHTML = newCountriesStats
 
     const renderRegionsHTML = regionsHTML => document.getElementById('regionTBody').innerHTML = regionsHTML
 
-
+    const renderCurrenciesHTML = currenciesHTML => document.getElementById('currenciesTBody').innerHTML = currenciesHTML
 
 
     document.getElementById('countriesForm').addEventListener('submit', async (event) => {
@@ -68,9 +95,11 @@
             const countriesHTML = generateCountriesHTML(countriesData)
             const countriesStats = generateCountriesStatsHTML(countriesData)
             const regionsHTML = generateRegionsHTML(countriesData)
+            const currenciesHTML = generateCurrenciesHTML(countriesData)
             renderCountriesHTML(countriesHTML)
             renderCountriesStatsHTML(countriesStats)
             renderRegionsHTML(regionsHTML)
+            renderCurrenciesHTML(currenciesHTML)
         } catch (error) {
             console.warn(error)
         }
@@ -80,10 +109,10 @@
 
     const generateCountriesStatsFromInput = (countries, input) => {
         const filteredCountries = countries.filter(country => {
-            const {name: {common}} = country
+            const { name: { common } } = country
             return common.toLowerCase().includes(input.toLowerCase())
         })
-    
+
         return filteredCountries
     }
 
@@ -93,13 +122,15 @@
             const input = document.getElementById('countryInput').value;
             console.log(input)
             const countriesData = await collectData('https://restcountries.com/v3.1/all');
-            const inputCountriesStats = generateCountriesStatsFromInput (countriesData, input)
+            const inputCountriesStats = generateCountriesStatsFromInput(countriesData, input)
             const countriesHTML = generateCountriesHTML(inputCountriesStats)
             const countriesStats = generateCountriesStatsHTML(inputCountriesStats)
             const regionsHTML = generateRegionsHTML(inputCountriesStats)
+            const currenciesHTML = generateCurrenciesHTML(inputCountriesStats)
             renderCountriesHTML(countriesHTML)
             renderCountriesStatsHTML(countriesStats)
             renderRegionsHTML(regionsHTML)
+            renderCurrenciesHTML(currenciesHTML)
         } catch (error) {
             console.warn(error)
         }
